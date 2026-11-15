@@ -1,0 +1,9 @@
+[Unit]
+Description=Start Spotify ad mute when the Flatpak scope appears
+
+[Path]
+PathExistsGlob=%t/systemd/transient/app-flatpak-com.spotify.Client-*.scope
+Unit=spotify-ad-watch.service
+
+[Install]
+WantedBy=default.target

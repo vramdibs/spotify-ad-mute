@@ -1,0 +1,8 @@
+.cursor/
+__pycache__/
+*.pyc
+.sdk/
+.gradle/
+local.properties
+build/
+*.apk
