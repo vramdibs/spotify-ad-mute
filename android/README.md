@@ -8,7 +8,12 @@ The package `ru.stabilnoitochka.spotifyadmute` is built with `./gradlew :app:ass
 
 `adb install -r` installs the apk into the personal profile. Download: [spotifyadmute-1.0.apk](https://github.com/vramdibs/spotify-ad-mute/releases/download/v1.0/spotifyadmute-1.0.apk). Shelter is not supported because accessibility settings are required, and there is no icon in the app drawer.
 
-In the personal profile, enable this package's accessibility service, for Spotify only. On Android 17 that is the only permission: there is no separate notification access.
+The package is not from the store, so its row under Accessibility is gray. On Android 17 that is the only permission: there is no separate notification access. Do the steps to unlock the setting:
+
+1. Settings, Apps, All apps, Spotify ad mute.
+2. Three dots, Allow access to settings.
+3. Accessibility, Downloaded apps, Spotify ad mute. The switch is no longer gray.
+4. Turn the switch on. In the dialog Allow the "Spotify ad mute" service to control your device?, tap Allow.
 
 Android warns that the package is not from the store. That is expected. Leave the service on in the full-access check: without it, muting stops.
 
