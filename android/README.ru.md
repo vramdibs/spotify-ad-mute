@@ -6,7 +6,7 @@
 
 Пакет `ru.stabilnoitochka.spotifyadmute` собирается командой `./gradlew :app:assembleDebug`. Запуск Gradle 8.7: JDK 17 или 21 (рекомендуется 21); JDK 25 не подходит. При необходимости задайте `JAVA_HOME` или `org.gradle.java.home` в локальном `gradle.properties`. Каталог Android SDK указывается в `local.properties` (`sdk.dir=...`). Образец: [`local.properties.example`](local.properties.example).
 
-`adb install -r` ставит apk в личный профиль, Shelter не поддерживается из-за требований настроек специальных возможностей + ярлыка в меню приложений нет.
+`adb install -r` ставит apk в личный профиль. Готовый файл: [spotifyadmute-1.0.apk](https://github.com/vramdibs/spotify-ad-mute/releases/download/v1.0/spotifyadmute-1.0.apk). Shelter не поддерживается из-за требований настроек специальных возможностей + ярлыка в меню приложений нет.
 
 В личном профиле включите специальные возможности этого пакета, только для Spotify Ad Mute. На Android 17 это единственное разрешение: отдельного доступа к уведомлениям нет.
 
