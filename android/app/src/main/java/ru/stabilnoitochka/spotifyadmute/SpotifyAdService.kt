@@ -20,7 +20,7 @@ class WindowPolicy {
     }
 
     fun apply(action: BreakAction, currentVolume: Int, writer: (Int) -> Unit) {
-        if (action == BreakAction.MUTE) {
+        if (action == BreakAction.MUTE || action == BreakAction.MUTE_AND_NEXT) {
             writer(0)
             return
         }
@@ -46,7 +46,7 @@ class SpotifyAdService : AccessibilityService() {
             return
         }
         val now = event.eventTime
-        if (now - lastEventAt < 500L) {
+        if (now - lastEventAt < 500L && !isBreakEvent(event)) {
             return
         }
         lastEventAt = now
@@ -66,9 +66,20 @@ class SpotifyAdService : AccessibilityService() {
             return
         }
         val action = MuteController.onWindow(this, collectText(root))
-        if (action == BreakAction.NEXT) {
+        if (action == BreakAction.NEXT || action == BreakAction.MUTE_AND_NEXT) {
             pressNext(root)
         }
+    }
+
+    private fun isBreakEvent(event: AccessibilityEvent): Boolean {
+        if (event.eventType == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
+            return AdBreak.isPlaybackNotice(notificationText(event))
+        }
+        val root = rootInActiveWindow ?: return false
+        if (root.packageName?.toString() != "com.spotify.music") {
+            return false
+        }
+        return AdBreak.isPlayerBreak(collectText(root))
     }
 
     private fun notificationText(event: AccessibilityEvent): String {

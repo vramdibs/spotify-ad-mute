@@ -29,6 +29,7 @@ enum class BreakAction {
     NONE,
     NEXT,
     MUTE,
+    MUTE_AND_NEXT,
     RESTORE,
 }
 
@@ -44,14 +45,10 @@ class BreakVolume {
             }
             return BreakAction.NONE
         }
-        val armed = armAt
-        if (armed == null) {
-            armAt = nowMs
-            return BreakAction.NEXT
-        }
-        if (remembered == null && nowMs >= armed + 1000L) {
+        if (remembered == null) {
             remembered = currentVolume
-            return BreakAction.MUTE
+            armAt = nowMs
+            return BreakAction.MUTE_AND_NEXT
         }
         return BreakAction.NONE
     }

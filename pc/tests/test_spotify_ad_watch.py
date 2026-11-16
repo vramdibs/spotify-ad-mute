@@ -27,31 +27,29 @@ from spotify_ad_watch import (
 )
 
 
-def test_first_ad_uri_requests_next_once():
+def test_first_ad_uri_mutes_once():
     watcher = Watcher()
-    assert watcher.on_uri("spotify:ad:a6de110d", now=0.0) is Decision.NEXT
+    assert watcher.on_uri("spotify:ad:a6de110d", now=0.0) is Decision.MUTE
     assert watcher.on_uri("spotify:ad:a6de110d", now=0.2) is Decision.NONE
 
 
-def test_same_ad_uri_after_one_second_mutes_once():
+def test_same_ad_uri_does_not_mute_again():
     watcher = Watcher()
-    watcher.on_uri("spotify:ad:a6de110d", now=0.0)
-    assert watcher.on_uri("spotify:ad:a6de110d", now=1.0) is Decision.MUTE
-    assert watcher.on_uri("spotify:ad:a6de110d", now=2.0) is Decision.NONE
+    assert watcher.on_uri("spotify:ad:a6de110d", now=0.0) is Decision.MUTE
+    assert watcher.on_uri("spotify:ad:a6de110d", now=1.0) is Decision.NONE
 
 
 def test_track_after_mute_unmutes():
     watcher = Watcher()
     watcher.on_uri("spotify:ad:a6de110d", now=0.0)
-    watcher.on_uri("spotify:ad:a6de110d", now=1.0)
     assert watcher.on_uri("spotify:track:12VRlypMnsX09G2iFGVSs5", now=30.0) is Decision.UNMUTE
     assert watcher.on_uri("spotify:track:12VRlypMnsX09G2iFGVSs5", now=31.0) is Decision.NONE
 
 
-def test_second_ad_requests_next_again():
+def test_second_ad_mutes_again():
     watcher = Watcher()
     watcher.on_uri("spotify:ad:a6de110d", now=0.0)
-    assert watcher.on_uri("spotify:ad:f71e6526", now=28.0) is Decision.NEXT
+    assert watcher.on_uri("spotify:ad:f71e6526", now=28.0) is Decision.MUTE
 
 
 def test_log_cursor_pairs_uri_with_ad_flag():
@@ -62,7 +60,7 @@ def test_log_cursor_pairs_uri_with_ad_flag():
     assert cursor.feed("17:48:53.967 I ad: no") == "spotify:track:12VRlypMnsX09G2iFGVSs5"
 
 
-def test_decide_after_next_rereads_once_and_mutes():
+def test_decide_after_mutes_then_skips_without_waiting():
     watcher = Watcher()
     slept = []
 
@@ -76,8 +74,8 @@ def test_decide_after_next_rereads_once_and_mutes():
         sleep_fn=sleep_fn,
         read_again_fn=lambda: "spotify:ad:a6de110d",
     )
-    assert actions == [Decision.NEXT, Decision.MUTE]
-    assert slept == [1.0]
+    assert actions == [Decision.MUTE, Decision.NEXT]
+    assert slept == []
 
 
 def test_sink_ids_match_spotify_only():

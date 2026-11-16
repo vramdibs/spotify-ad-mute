@@ -27,13 +27,6 @@ class Watcher:
             if self.armed_uri != uri:
                 self.armed_uri = uri
                 self.arm_at = now
-                self.mute_applied = False
-                return Decision.NEXT
-            if (
-                not self.mute_applied
-                and self.arm_at is not None
-                and now >= self.arm_at + 1.0
-            ):
                 self.muted = True
                 self.mute_applied = True
                 return Decision.MUTE
@@ -66,12 +59,11 @@ class LogCursor:
 
 
 def decide_after(watcher, uri, now, sleep_fn, read_again_fn):
-    first = watcher.on_uri(uri, now)
-    actions = [first]
-    if first is Decision.NEXT:
-        sleep_fn(1.0)
-        actions.append(watcher.on_uri(read_again_fn(), now + 1.0))
-    return actions
+    del sleep_fn, read_again_fn
+    decision = watcher.on_uri(uri, now)
+    if decision is Decision.MUTE:
+        return [Decision.MUTE, Decision.NEXT]
+    return [decision]
 
 
 LOG_PATH = Path.home() / ".var/app/com.spotify.Client/data/spotify-ad.log"

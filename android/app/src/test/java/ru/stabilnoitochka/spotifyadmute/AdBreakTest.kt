@@ -37,12 +37,10 @@ class AdBreakTest {
     }
 
     @Test
-    fun nextThenMuteAfterOneSecondThenRestoreRemembered() {
+    fun muteAndSkipOnFirstSampleThenRestoreRemembered() {
         val volume = BreakVolume()
-        assertEquals(BreakAction.NEXT, volume.onSample(true, 0, 7))
+        assertEquals(BreakAction.MUTE_AND_NEXT, volume.onSample(true, 0, 7))
         assertEquals(BreakAction.NONE, volume.onSample(true, 500, 7))
-        assertEquals(BreakAction.MUTE, volume.onSample(true, 1000, 7))
-        assertEquals(BreakAction.NONE, volume.onSample(true, 1500, 0))
         assertEquals(BreakAction.RESTORE, volume.onSample(false, 2000, 3))
         assertEquals(7, volume.takeRemembered())
     }
@@ -68,8 +66,8 @@ class AdBreakTest {
         assertFalse(AdBreak.isPlaybackNotice(session))
         val policy = WindowPolicy()
         val ad = "Spotify Объявление • 1 из 2"
-        assertEquals(BreakAction.NEXT, policy.onPlaybackText(ad, 0, 4))
-        assertEquals(BreakAction.MUTE, policy.onPlaybackText(ad, 1000, 4))
+        assertEquals(BreakAction.MUTE_AND_NEXT, policy.onPlaybackText(ad, 0, 4))
+        assertEquals(BreakAction.NONE, policy.onPlaybackText(ad, 1000, 4))
         val playing = AdBreak.playingText(notice, session)
         assertEquals(BreakAction.RESTORE, policy.onPlaybackText(playing, 5000, 0))
     }
@@ -78,8 +76,8 @@ class AdBreakTest {
     fun pausedNoticeCounterMutes() {
         val policy = WindowPolicy()
         val notice = "Spotify Объявление • 1 из 2"
-        assertEquals(BreakAction.NEXT, policy.onPlaybackText(notice, 0, 6))
-        assertEquals(BreakAction.MUTE, policy.onPlaybackText(notice, 1000, 6))
+        assertEquals(BreakAction.MUTE_AND_NEXT, policy.onPlaybackText(notice, 0, 6))
+        assertEquals(BreakAction.NONE, policy.onPlaybackText(notice, 1000, 6))
     }
 
     @Test
@@ -91,9 +89,9 @@ class AdBreakTest {
             Unit
         }
         val ad = "Воспроизведение продолжится после перерыва Объявление • 1 из 2"
-        assertEquals(BreakAction.NEXT, policy.onPlaybackText(ad, 0, 6))
-        assertEquals(BreakAction.MUTE, policy.onPlaybackText(ad, 1000, 6))
-        policy.apply(BreakAction.MUTE, 6, writer)
+        assertEquals(BreakAction.MUTE_AND_NEXT, policy.onPlaybackText(ad, 0, 6))
+        assertEquals(BreakAction.NONE, policy.onPlaybackText(ad, 1000, 6))
+        policy.apply(BreakAction.MUTE_AND_NEXT, 6, writer)
         assertFalse(AdBreak.isPlayerBreak("Acqua e Sale — Papik, Frankie Lovecchio"))
         assertEquals(BreakAction.NONE, WindowPolicy().onWindowText("Spotify Объявление • 1 из 2", 0, true, 6))
         assertEquals(BreakAction.RESTORE, policy.onPlaybackText("Acqua e Sale — Papik", 5000, 0))
@@ -109,10 +107,9 @@ class AdBreakTest {
             written.add(level)
             Unit
         }
-        assertEquals(BreakAction.NEXT, policy.onWindowText("Advertisement left in the break", 0, true, 5))
-        policy.apply(BreakAction.NEXT, 5, writer)
-        assertEquals(BreakAction.MUTE, policy.onWindowText("Advertisement left in the break", 1000, true, 5))
-        policy.apply(BreakAction.MUTE, 5, writer)
+        assertEquals(BreakAction.MUTE_AND_NEXT, policy.onWindowText("Advertisement left in the break", 0, true, 5))
+        policy.apply(BreakAction.MUTE_AND_NEXT, 5, writer)
+        assertEquals(BreakAction.NONE, policy.onWindowText("Advertisement left in the break", 1000, true, 5))
         assertEquals(BreakAction.RESTORE, policy.onWindowText("playlist", 5000, true, 0))
         policy.apply(BreakAction.RESTORE, 0, writer)
         assertEquals(listOf(0, 5), written)
