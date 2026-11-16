@@ -4,7 +4,7 @@ From this directory, run:
 
     powershell -NoProfile -ExecutionPolicy Bypass -File .\install-user.ps1
 
-`Spotify.exe` is expected at `%APPDATA%\Spotify\Spotify.exe`. The log is `%LOCALAPPDATA%\spotify-ad-mute\spotify-ad.log`.
+`Spotify.exe` is expected at `%APPDATA%\Spotify\Spotify.exe`. The Microsoft Store app is not installed there and is not supported. The log is `%LOCALAPPDATA%\spotify-ad-mute\spotify-ad.log`.
 
 The script creates a `Spotify Ad Mute` shortcut in the Start menu. The shortcut starts `watch.py` (Python is required on PATH). The script opens the official `Spotify.exe` with `--log-file` and `--debug-level=8`. It also creates a scheduled task that runs the same script with `--ensure` at logon: a Spotify autostart without the log is restarted with the flag.
 

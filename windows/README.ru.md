@@ -4,7 +4,7 @@
 
     powershell -NoProfile -ExecutionPolicy Bypass -File .\install-user.ps1
 
-`Spotify.exe` ожидается в `%APPDATA%\Spotify\Spotify.exe`. Журнал: `%LOCALAPPDATA%\spotify-ad-mute\spotify-ad.log`.
+`Spotify.exe` ожидается в `%APPDATA%\Spotify\Spotify.exe`. Приложение из Microsoft Store туда не ставится, этот вариант не поддерживается. Журнал: `%LOCALAPPDATA%\spotify-ad-mute\spotify-ad.log`.
 
 Скрипт создает ярлык `Spotify Ad Mute` в главном меню. Ярлык запускает `watch.py` (требует Python в PATH). Скрипт открывает официальный `Spotify.exe` с `--log-file` и `--debug-level=8`. Также создается назначенное задание, при входе в ОС запускает тот же скрипт с `--ensure`: автозапуск Spotify без журнала перезапускается уже с флагом.
 
