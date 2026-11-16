@@ -6,7 +6,7 @@ Install Spotify:
 
 The package `ru.stabilnoitochka.spotifyadmute` is built with `./gradlew :app:assembleDebug`. Gradle 8.7 runs on JDK 17 or 21 (21 is recommended). JDK 25 does not work. If needed, set `JAVA_HOME` or `org.gradle.java.home` in a local `gradle.properties`. The Android SDK directory goes in `local.properties` (`sdk.dir=...`). Sample: [`local.properties.example`](local.properties.example).
 
-`adb install -r` installs the apk into the personal profile. Download: [spotifyadmute-1.0.apk](https://github.com/vramdibs/spotify-ad-mute/releases/download/v1.0/spotifyadmute-1.0.apk). Shelter is not supported because accessibility settings are required, and there is no icon in the app drawer.
+`adb install -r` installs the apk into the personal profile. Download: [spotifyadmute-1.0.apk](https://github.com/vramdibs/spotify-ad-mute/releases/latest/download/spotifyadmute-1.0.apk). Shelter is not supported because accessibility settings are required, and there is no icon in the app drawer.
 
 Android 14 needs two switches.
 
