@@ -1,11 +1,15 @@
 from enum import Enum
 from pathlib import Path
-import fcntl
 import json
 import os
 import subprocess
 import sys
 import time
+
+try:
+    import fcntl
+except ImportError:
+    fcntl = None
 
 
 class Decision(Enum):
@@ -51,11 +55,21 @@ class LogCursor:
         if "track_uri:" in line:
             self._uri = line.split("track_uri:", 1)[1].strip()
             return None
-        if "ad: yes" in line and isinstance(self._uri, str) and self._uri.startswith("spotify:ad:"):
+        flag = ad_flag(line)
+        if flag is True and isinstance(self._uri, str) and self._uri.startswith("spotify:ad:"):
             return self._uri
-        if "ad: no" in line and isinstance(self._uri, str) and self._uri.startswith("spotify:track:"):
+        if flag is False and isinstance(self._uri, str) and self._uri.startswith("spotify:track:"):
             return self._uri
         return None
+
+
+def ad_flag(line):
+    lower = line.lower()
+    if "ad: yes" in lower or "ad: true" in lower:
+        return True
+    if "ad: no" in lower or "ad: false" in lower:
+        return False
+    return None
 
 
 def decide_after(watcher, uri, now, sleep_fn, read_again_fn):

@@ -60,6 +60,14 @@ def test_log_cursor_pairs_uri_with_ad_flag():
     assert cursor.feed("17:48:53.967 I ad: no") == "spotify:track:12VRlypMnsX09G2iFGVSs5"
 
 
+def test_log_cursor_accepts_true_and_false_ad_flag():
+    cursor = LogCursor()
+    assert cursor.feed("track_uri: spotify:ad:abc") is None
+    assert cursor.feed("        ad: true") == "spotify:ad:abc"
+    assert cursor.feed("track_uri: spotify:track:abc") is None
+    assert cursor.feed("        ad: false") == "spotify:track:abc"
+
+
 def test_decide_after_mutes_then_skips_without_waiting():
     watcher = Watcher()
     slept = []
