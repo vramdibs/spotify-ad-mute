@@ -17,7 +17,7 @@ Accessibility reads the Spotify screen. The package is not from the store, so th
 3. Accessibility, Downloaded apps, Spotify ad mute. The switch is no longer gray.
 4. Turn the switch on. In the dialog Allow the "Spotify ad mute" service to control your device?, tap Allow.
 
-Notification access is a separate switch. While the shade is in front, an update to an already posted notification does not reach accessibility. The line «Объявление • 1 из 2» on that pause is read only with this access.
+Notification access is a separate switch. While the shade is in front, an update to an already posted notification does not reach accessibility. The line «Advertisement • 1 of 2» on that pause is read only with this access.
 
 1. Settings, Notifications, Notifications on devices and in apps.
 2. Spotify ad mute in the Not allowed list.
@@ -26,7 +26,7 @@ Notification access is a separate switch. While the shade is in front, an update
 
 Android warns that the package is not from the store. That is expected. Leave the service on in the full-access check: without it, muting stops.
 
-The service lowers the music volume on the ad screen with a pause timer. If the screen is off or the shade is in front, there is no window event. If the notification still says «Реклама» and the player session is already named as a song, the volume is restored from the session when the system connects the notification listener. An Advertisement card in the feed leaves the volume unchanged. Android music is one stream, so another app on that stream can get quieter for the length of the ad. The package has no internet. While Spotify is closed, the service receives no events and does not write the volume.
+The service lowers the music volume on the ad screen with a pause timer. If the screen is off or the shade is in front, there is no window event. If the notification still says «Advertisement» and the player session is already named as a song, the volume is restored from the session when the system connects the notification listener. An Advertisement card in the feed leaves the volume unchanged. Android music is one stream, so another app on that stream can get quieter for the length of the ad. The package has no internet. While Spotify is closed, the service receives no events and does not write the volume.
 
 Check:
 
